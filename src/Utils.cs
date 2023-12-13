@@ -25,6 +25,11 @@ public static class Utils
         return Clamp(value, 0, 1);
     }
 
+    public static float Pow(float a, float b)
+    {
+        return (float) Math.Pow(a, b);
+    }
+
     // https://stackoverflow.com/questions/1335426/is-there-a-built-in-c-net-system-api-for-hsv-to-rgb
     public static Color HSVtoColor(float hue, float saturation, float value)
     {
