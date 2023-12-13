@@ -43,6 +43,7 @@ public class Simulation
 
     public void Simulate()
     {
+        // TODO: Apply one kind of force at a time
         foreach (Ball ball in Balls)
         {
             ball.Update();

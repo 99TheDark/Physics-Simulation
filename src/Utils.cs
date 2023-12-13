@@ -55,4 +55,9 @@ public static class Utils
 
         return HSVtoColor(Hue, 0.8f, 1f);
     }
+
+    public static float RandomRange(Random random, float min, float max)
+    {
+        return (float) random.NextDouble() * (max - min) + min;
+    }
 }
