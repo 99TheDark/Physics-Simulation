@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Raylib_cs;
 
 public class Simulation
@@ -48,7 +49,7 @@ public class Simulation
         {
             ball.Update();
 
-            // TODO: Skip if rectangle bounds is not touching circle: Maybe checking circle-line & circle-circle collisions will be faster than also including them
+            // TODO: Check for collisions first, and only include them
             foreach (Ball b in Balls)
             {
                 if (b == ball)

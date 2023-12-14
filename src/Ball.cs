@@ -30,6 +30,7 @@ public class Ball : Renderable
 
     public void Update()
     {
+        Acceleration *= 0;
         Acceleration.Y += Const.Gravity;
     }
 
@@ -37,8 +38,6 @@ public class Ball : Renderable
     {
         Velocity += Acceleration * Const.DeltaTime;
         Position += Velocity * Const.DeltaTime;
-
-        Acceleration *= 0;
     }
 
     public void Collide(Line line)
@@ -98,6 +97,11 @@ public class Ball : Renderable
         Vector2 normalized = displacement / displacement.Length();
 
         Vector2 exit = normalized * (Radius - displacement.Length());
+
+        dot = Vector2.Dot(Position - line.A, difference);
+        displacement = Position - (line.A + Utils.Clamp01(dot / length2) * difference);
+        normalized = displacement / displacement.Length();
+
         Vector2 normal = Force(normalized);
 
         return (exit, normal);
@@ -128,6 +132,13 @@ public class Ball : Renderable
             (int) (Position.Y * Const.Meter),
             Radius * Const.Meter,
             Color
+        );
+
+        if (Const.ForceArrows) Raylib.DrawLineEx(
+            Position * Const.Meter,
+            Position * Const.Meter + Acceleration * Mass,
+            3f,
+            Color.RED
         );
     }
 }

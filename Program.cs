@@ -16,10 +16,9 @@ for (int i = 0; i < 8; i++)
     sim.Balls.Add(ball);
 }*/
 
-List<Line> bezier = Line.Bezier(1f, 1f, 16f, 10f, 3f, 5f, 7f, 10f);
+List<Line> bezier = Line.Bezier(1f, 1f, 8f, 5f, 1.5f, 2.5f, 3.5f, 5f);
 sim.Lines.AddRange(bezier);
 
-sim.Balls.Add(new(3f, 0.3f, 2f, 1f));
-sim.Lines.Add(new(1.99f, 2f, 1.99f, 4f));
+sim.Balls.Add(new(3f, 0.3f, 2f, 1.5f));
 
 sim.Run();
