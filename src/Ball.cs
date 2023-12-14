@@ -50,6 +50,8 @@ public class Ball : Renderable
 
             ApplyForce(normal);
 
+            Velocity -= Utils.Project(Velocity, normal);
+
             Vector2 parallel = Utils.Project(Velocity, line.B - line.A);
             if (parallel != Vector2.Zero)
             {
@@ -146,7 +148,7 @@ public class Ball : Renderable
         if (Const.ForceArrows) Raylib.DrawLineEx(
             Position * Const.Meter,
             Position * Const.Meter + Acceleration * Mass,
-            3f,
+            Const.LineThickness,
             Color.RED
         );
     }

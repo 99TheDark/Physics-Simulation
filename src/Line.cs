@@ -51,6 +51,6 @@ public class Line : Renderable
 
     public void Draw()
     {
-        Raylib.DrawLineEx(A * Const.Meter, B * Const.Meter, 3, Color.BLACK);
+        Raylib.DrawLineEx(A * Const.Meter, B * Const.Meter, Const.LineThickness, Color.BLACK);
     }
 }
