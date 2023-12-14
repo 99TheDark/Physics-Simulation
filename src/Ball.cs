@@ -44,11 +44,20 @@ public class Ball : Renderable
     {
         (Vector2 exit, Vector2 normal) = Normal(line);
 
-        if (exit.X != 0 || exit.Y != 0)
+        if (exit != Vector2.Zero)
         {
             Position += exit;
 
             ApplyForce(normal);
+
+            Vector2 parallel = Utils.Project(Velocity, line.B - line.A);
+            if (parallel != Vector2.Zero)
+            {
+                Vector2 opposition = -Vector2.Normalize(Utils.Project(Velocity, line.B - line.A));
+                Vector2 friction = opposition * normal.Length() * Const.KineticFriction;
+
+                ApplyForce(friction);
+            }
         }
     }
 
@@ -56,7 +65,7 @@ public class Ball : Renderable
     {
         (Vector2 exit, Vector2 normal) = Normal(ball);
 
-        if (exit.X != 0 || exit.Y != 0)
+        if (exit != Vector2.Zero)
         {
             Position += exit;
 

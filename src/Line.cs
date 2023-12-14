@@ -19,7 +19,7 @@ public class Line : Renderable
     }
 
     public static List<Line> Bezier(float x1, float y1, float x2, float y2,
-                                    float cx1, float cy1, float cx2, float cy2, int subdivisions = 40)
+                                    float cx1, float cy1, float cx2, float cy2, int subdivisions = 300)
     {
         return Bezier(new(x1, y1), new(x2, y2), new(cx1, cy1), new(cx2, cy2), subdivisions);
     }

@@ -29,8 +29,6 @@ public class Simulation
             Raylib.BeginDrawing();
             Raylib.ClearBackground(Color.WHITE);
 
-            Const.DeltaTime = Raylib.GetFrameTime();
-
             Simulate();
             Draw();
 
@@ -44,6 +42,8 @@ public class Simulation
 
     public void Simulate()
     {
+        Const.DeltaTime = Raylib.GetFrameTime();
+
         // TODO: Apply one kind of force at a time
         foreach (Ball ball in Balls)
         {
