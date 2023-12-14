@@ -1,3 +1,4 @@
+using System.Numerics;
 using Raylib_cs;
 
 public static class Utils
@@ -28,6 +29,11 @@ public static class Utils
     public static float Pow(float a, float b)
     {
         return (float) Math.Pow(a, b);
+    }
+
+    public static Vector2 Project(Vector2 a, Vector2 b)
+    {
+        return Vector2.Dot(a, b) / b.LengthSquared() * b;
     }
 
     // https://stackoverflow.com/questions/1335426/is-there-a-built-in-c-net-system-api-for-hsv-to-rgb

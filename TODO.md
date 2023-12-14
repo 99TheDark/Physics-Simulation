@@ -1,4 +1,4 @@
 # TODO
-- Seperate collisions into passes
+- Seperate forces into passes
 - Add friction
 - Add drag

@@ -30,7 +30,7 @@ public class Ball : Renderable
 
     public void Update()
     {
-        Acceleration *= 0;
+        Acceleration = Vector2.Zero;
         Acceleration.Y += Const.Gravity;
     }
 
@@ -94,13 +94,13 @@ public class Ball : Renderable
             return (Vector2.Zero, Vector2.Zero);
         }
 
-        Vector2 normalized = displacement / displacement.Length();
+        Vector2 normalized = Vector2.Normalize(displacement);
 
         Vector2 exit = normalized * (Radius - displacement.Length());
 
         dot = Vector2.Dot(Position - line.A, difference);
         displacement = Position - (line.A + Utils.Clamp01(dot / length2) * difference);
-        normalized = displacement / displacement.Length();
+        normalized = Vector2.Normalize(displacement);
 
         Vector2 normal = Force(normalized);
 
