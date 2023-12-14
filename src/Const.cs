@@ -1,6 +1,6 @@
 public static class Const
 {
-    public static readonly float Meter = 100; // pixels per meter
+    public static readonly float Meter = 70; // pixels / meter
 
     public static readonly float Gravity = 9.81f;
     public static readonly float StaticFriction = 0.55f;
