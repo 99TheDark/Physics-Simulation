@@ -46,20 +46,9 @@ public class Ball : Renderable
 
         if (exit != Vector2.Zero)
         {
-            Position += exit;
+            Position += exit * 50;
 
-            ApplyForce(normal);
-
-            Velocity -= Utils.Project(Velocity, normal);
-
-            Vector2 parallel = Utils.Project(Velocity, line.B - line.A);
-            if (parallel != Vector2.Zero)
-            {
-                Vector2 opposition = -Vector2.Normalize(Utils.Project(Velocity, line.B - line.A));
-                Vector2 friction = opposition * normal.Length() * Const.KineticFriction;
-
-                ApplyForce(friction);
-            }
+            ApplyNormal(normal);
         }
     }
 
@@ -71,8 +60,8 @@ public class Ball : Renderable
         {
             Position += exit;
 
-            ApplyForce(normal);
-            ball.ApplyForce(-normal);
+            ApplyNormal(normal);
+            ball.ApplyNormal(-normal);
         }
     }
 
@@ -81,9 +70,21 @@ public class Ball : Renderable
         Acceleration += force / Mass;
     }
 
-    public Vector2 Force(Vector2 direction)
+    public void ApplyNormal(Vector2 normal)
     {
-        return direction * Mass * Acceleration.Length();
+        ApplyForce(normal);
+
+        // This isn't correct unless the object is completely unmoving (ie, a line, not a ball)
+        // Velocity -= Utils.Project(Velocity, normal);
+
+        Vector2 difference = new(normal.Y, -normal.X);
+
+        Vector2 opposition = -Vector2.Normalize(Utils.Project(Velocity, difference));
+        Vector2 friction = opposition * normal.Length() * Const.KineticFriction;
+
+        if (Mass > 4) Console.WriteLine(normal);
+
+        ApplyForce(friction);
     }
 
     // https://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment
@@ -113,7 +114,9 @@ public class Ball : Renderable
         displacement = Position - (line.A + Utils.Clamp01(dot / length2) * difference);
         normalized = Vector2.Normalize(displacement);
 
-        Vector2 normal = Force(normalized);
+        Vector2 normal = normalized * Mass * Acceleration.Length(); // should be amount of acceleration towards itself
+
+        if (Mass > 4) Console.WriteLine(normal);
 
         return (exit, normal);
     }
@@ -128,7 +131,7 @@ public class Ball : Renderable
             Vector2 normalized = (Position - ball.Position) / distance;
 
             Vector2 exit = normalized * interception;
-            Vector2 normal = Force(normalized);
+            Vector2 normal = normalized * Mass * Acceleration.Length(); // same thing as bal
 
             return (exit, normal);
         }
