@@ -46,7 +46,7 @@ public class Ball : Renderable
 
         if (exit != Vector2.Zero)
         {
-            Position += exit * 50;
+            Position += exit;
 
             ApplyNormal(normal);
         }
@@ -114,7 +114,7 @@ public class Ball : Renderable
         displacement = Position - (line.A + Utils.Clamp01(dot / length2) * difference);
         normalized = Vector2.Normalize(displacement);
 
-        Vector2 normal = normalized * Mass * Acceleration.Length(); // should be amount of acceleration towards itself
+        Vector2 normal = normalized * Mass * Acceleration.Length();
 
         if (Mass > 4) Console.WriteLine(normal);
 
