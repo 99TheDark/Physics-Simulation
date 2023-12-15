@@ -28,6 +28,11 @@ public class Ball : Renderable
         Color = Utils.VibrantColor();
     }
 
+    public static bool Invalid(Ball ball)
+    {
+        return double.IsNaN(ball.Position.X) || double.IsNaN(ball.Position.Y);
+    }
+
     public void Update()
     {
         Acceleration = Vector2.Zero;
@@ -81,6 +86,7 @@ public class Ball : Renderable
         Vector2 difference = new(normal.Y, -normal.X);
 
         Vector2 opposition = -Vector2.Normalize(Utils.Project(Velocity, difference));
+        if (!double.IsNaN(Position.X)) Console.WriteLine(opposition);
         Vector2 friction = opposition * normal.Length() * Const.KineticFriction;
 
         ApplyForce(friction);

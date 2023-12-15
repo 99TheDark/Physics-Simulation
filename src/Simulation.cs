@@ -44,6 +44,8 @@ public class Simulation
     {
         Const.DeltaTime = Raylib.GetFrameTime();
 
+        List<Ball> Invalid = new();
+
         // TODO: Apply one kind of force at a time
         foreach (Ball ball in Balls)
         {
@@ -67,6 +69,13 @@ public class Simulation
             }
 
             ball.Step();
+
+            if (Ball.Invalid(ball)) Invalid.Add(ball);
+        }
+
+        foreach (Ball ball in Invalid)
+        {
+            Balls.Remove(ball);
         }
     }
 
