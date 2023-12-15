@@ -60,8 +60,8 @@ public class Ball : Renderable
         {
             Position += exit;
 
-            ApplyNormal(normal);
-            ball.ApplyNormal(-normal);
+            ApplyForce(normal);
+            ball.ApplyForce(-normal);
         }
     }
 
@@ -72,17 +72,17 @@ public class Ball : Renderable
 
     public void ApplyNormal(Vector2 normal)
     {
+        if (normal == Vector2.Zero) return;
+
         ApplyForce(normal);
 
         // This isn't correct unless the object is completely unmoving (ie, a line, not a ball)
-        // Velocity -= Utils.Project(Velocity, normal);
+        Velocity -= Utils.Project(Velocity, normal);
 
         Vector2 difference = new(normal.Y, -normal.X);
 
         Vector2 opposition = -Vector2.Normalize(Utils.Project(Velocity, difference));
         Vector2 friction = opposition * normal.Length() * Const.KineticFriction;
-
-        if (Mass > 4) Console.WriteLine(normal);
 
         ApplyForce(friction);
     }
@@ -114,9 +114,7 @@ public class Ball : Renderable
         displacement = Position - (line.A + Utils.Clamp01(dot / length2) * difference);
         normalized = Vector2.Normalize(displacement);
 
-        Vector2 normal = normalized * Mass * Acceleration.Length();
-
-        if (Mass > 4) Console.WriteLine(normal);
+        Vector2 normal = normalized * Mass * Utils.Project(Acceleration, normalized).Length();
 
         return (exit, normal);
     }
