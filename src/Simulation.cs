@@ -22,6 +22,7 @@ public class Simulation
 
     public void Run()
     {
+        Raylib.SetTraceLogLevel(TraceLogLevel.LOG_ERROR);
         Raylib.InitWindow(Width, Height, Title);
 
         while (!Raylib.WindowShouldClose())
