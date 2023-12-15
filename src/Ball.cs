@@ -84,12 +84,15 @@ public class Ball : Renderable
         Velocity -= Utils.Project(Velocity, normal) * Const.StaticFriction;
 
         Vector2 difference = new(normal.Y, -normal.X);
+        Vector2 parallel = Utils.Project(Velocity, difference);
 
-        Vector2 opposition = -Vector2.Normalize(Utils.Project(Velocity, difference));
-        if (!double.IsNaN(Position.X)) Console.WriteLine(opposition);
-        Vector2 friction = opposition * normal.Length() * Const.KineticFriction;
+        if (parallel != Vector2.Zero)
+        {
+            Vector2 opposition = -Vector2.Normalize(parallel);
+            Vector2 friction = opposition * normal.Length() * Const.KineticFriction;
 
-        ApplyForce(friction);
+            ApplyForce(friction);
+        }
     }
 
     // https://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment

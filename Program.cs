@@ -10,8 +10,8 @@ sim.Lines.Add(new(2.5f, 11f, 3.5f, 11f));
 sim.Lines.Add(new(2.5f, 11f, 2.25f, 10f));
 sim.Lines.Add(new(3.5f, 11f, 3.75f, 10f));
 
-// sim.Balls.Add(new(0.4f, 2f, 0.2f));
-// sim.Balls.Add(new(0.5f, 8f, 7f));
+sim.Balls.Add(new(0.4f, 2f, 0.2f));
+sim.Balls.Add(new(0.5f, 8f, 7f));
 sim.Balls.Add(new(0.2f, 3f, 8f));
 
 sim.Run();
