@@ -12,9 +12,8 @@ public class Example2 : Example
             float x = Utils.RandomRange(rand, 2.5f, 8.5f);
             float y = 6 - i;
             float radius = Utils.RandomRange(rand, 0.1f, 1f);
-            float mass = (float) Math.PI * radius * radius;
 
-            Ball ball = new(mass, radius, x, y);
+            Ball ball = new(radius, x, y);
             sim.Balls.Add(ball);
         }
     }

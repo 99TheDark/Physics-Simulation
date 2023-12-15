@@ -12,17 +12,17 @@ public class Ball : Renderable
     public Vector2 Velocity = Vector2.Zero;
     public Vector2 Acceleration = Vector2.Zero;
 
-    public Ball(float mass, float radius, Vector2 position)
+    public Ball(float radius, Vector2 position)
     {
-        Mass = mass;
+        Mass = (float) Math.PI * radius * radius;
         Radius = radius;
         Position = position;
         Color = Utils.VibrantColor();
     }
 
-    public Ball(float mass, float radius, float xPosition, float yPosition)
+    public Ball(float radius, float xPosition, float yPosition)
     {
-        Mass = mass;
+        Mass = (float) Math.PI * radius * radius;
         Radius = radius;
         Position = new(xPosition, yPosition);
         Color = Utils.VibrantColor();
@@ -76,8 +76,7 @@ public class Ball : Renderable
 
         ApplyForce(normal);
 
-        // This isn't correct unless the object is completely unmoving (ie, a line, not a ball)
-        Velocity -= Utils.Project(Velocity, normal);
+        Velocity -= Utils.Project(Velocity, normal) * Const.StaticFriction;
 
         Vector2 difference = new(normal.Y, -normal.X);
 
