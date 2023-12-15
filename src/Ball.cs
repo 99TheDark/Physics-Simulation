@@ -3,10 +3,10 @@ using Raylib_cs;
 
 public class Ball : Renderable
 {
-    public Color Color;
+    public readonly Color Color;
 
-    public float Mass;
-    public float Radius;
+    public readonly float Mass;
+    public readonly float Radius;
 
     public Vector2 Position;
     public Vector2 Velocity = Vector2.Zero;
@@ -65,6 +65,7 @@ public class Ball : Renderable
         {
             Position += exit;
 
+            // TODO: Apply friction using ApplyNormal once velocity is sorted out
             ApplyForce(normal);
             ball.ApplyForce(-normal);
         }
@@ -83,12 +84,12 @@ public class Ball : Renderable
 
         Velocity -= Utils.Project(Velocity, normal) * Const.StaticFriction;
 
-        Vector2 difference = new(normal.Y, -normal.X);
-        Vector2 parallel = Utils.Project(Velocity, difference);
+        Vector2 parallel = new(normal.Y, -normal.X);
+        Vector2 direction = Utils.Project(Velocity, parallel);
 
-        if (parallel != Vector2.Zero)
+        if (direction != Vector2.Zero)
         {
-            Vector2 opposition = -Vector2.Normalize(parallel);
+            Vector2 opposition = -Vector2.Normalize(direction);
             Vector2 friction = opposition * normal.Length() * Const.KineticFriction;
 
             ApplyForce(friction);
@@ -104,10 +105,9 @@ public class Ball : Renderable
             return (Vector2.Zero, Vector2.Zero);
         }
 
-        Vector2 difference = line.B - line.A;
-        float dot = Vector2.Dot(Position - line.A, difference);
+        float dot = Vector2.Dot(Position - line.A, line.Difference);
 
-        Vector2 displacement = Position - (line.A + Utils.Clamp01(dot / length2) * difference);
+        Vector2 displacement = Position - (line.A + Utils.Clamp01(dot / length2) * line.Difference);
 
         if (displacement.Length() > Radius)
         {
@@ -118,8 +118,8 @@ public class Ball : Renderable
 
         Vector2 exit = normalized * (Radius - displacement.Length());
 
-        dot = Vector2.Dot(Position - line.A, difference);
-        displacement = Position - (line.A + Utils.Clamp01(dot / length2) * difference);
+        dot = Vector2.Dot(Position - line.A, line.Difference);
+        displacement = Position - (line.A + Utils.Clamp01(dot / length2) * line.Difference);
         normalized = Vector2.Normalize(displacement);
 
         Vector2 normal = normalized * Mass * Utils.Project(Acceleration, normalized).Length();

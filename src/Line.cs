@@ -3,19 +3,23 @@ using Raylib_cs;
 
 public class Line : Renderable
 {
-    public Vector2 A;
-    public Vector2 B;
+    public readonly Vector2 A;
+    public readonly Vector2 B;
+
+    public readonly Vector2 Difference;
 
     public Line(Vector2 a, Vector2 b)
     {
         A = a;
         B = b;
+        Difference = B - A;
     }
 
     public Line(float ax, float ay, float bx, float by)
     {
         A = new(ax, ay);
         B = new(bx, by);
+        Difference = B - A;
     }
 
     public static List<Line> Bezier(float x1, float y1, float x2, float y2,
