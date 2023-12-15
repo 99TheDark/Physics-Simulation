@@ -43,7 +43,7 @@ public class Ball : Renderable
         // Gravity
         Acceleration.Y += Const.Gravity;
 
-        // Drag -> diameter = cross sectional area (a line)
+        // Drag: diameter = cross sectional area (a line)
         Acceleration.Y -= Const.Drag * Diameter * Velocity.LengthSquared() / Mass;
     }
 

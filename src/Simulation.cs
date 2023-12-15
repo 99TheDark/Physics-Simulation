@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Raylib_cs;
 
 public class Simulation
@@ -9,6 +8,8 @@ public class Simulation
 
     public List<Ball> Balls;
     public List<Line> Lines;
+
+    private System.Timers.Timer timer = new(2000);
 
     public Simulation(int width, int height, string title)
     {
@@ -24,6 +25,12 @@ public class Simulation
     {
         Raylib.SetTraceLogLevel(TraceLogLevel.LOG_ERROR);
         Raylib.InitWindow(Width, Height, Title);
+
+        Random rand = new Random();
+
+        timer.AutoReset = true;
+        timer.Elapsed += new((_, _) => Balls.Add(new(Utils.RandomRange(rand, 0.1f, 0.5f), 1.5f, 0f)));
+        timer.Start();
 
         while (!Raylib.WindowShouldClose())
         {
@@ -45,15 +52,13 @@ public class Simulation
     {
         Const.DeltaTime = Raylib.GetFrameTime();
 
-        List<Ball> Invalid = new();
-
-        // TODO: Apply one kind of force at a time
-        foreach (Ball ball in Balls)
+        // TODO: Do something cleaner than spamming ToList, perhaps copy beforehand
+        foreach (Ball ball in Balls.ToList())
         {
             ball.Update();
 
             // TODO: Check for collisions first, and only include them
-            foreach (Ball b in Balls)
+            foreach (Ball b in Balls.ToList())
             {
                 if (b == ball)
                 {
@@ -63,7 +68,7 @@ public class Simulation
                 ball.Collide(b);
             }
 
-            foreach (Line l in Lines)
+            foreach (Line l in Lines.ToList())
             {
 
                 ball.Collide(l);
@@ -71,23 +76,18 @@ public class Simulation
 
             ball.Step();
 
-            if (Ball.Invalid(ball)) Invalid.Add(ball);
-        }
-
-        foreach (Ball ball in Invalid)
-        {
-            Balls.Remove(ball);
+            if (Ball.Invalid(ball) || ball.Position.Y >= 500) Balls.Remove(ball);
         }
     }
 
     public void Draw()
     {
-        foreach (Line line in Lines)
+        foreach (Line line in Lines.ToList())
         {
             line.Draw();
         }
 
-        foreach (Ball ball in Balls)
+        foreach (Ball ball in Balls.ToList())
         {
             ball.Draw();
         }
