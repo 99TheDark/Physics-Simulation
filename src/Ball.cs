@@ -7,6 +7,7 @@ public class Ball : Renderable
 
     public readonly float Mass;
     public readonly float Radius;
+    public readonly float Diameter;
 
     public Vector2 Position;
     public Vector2 Velocity = Vector2.Zero;
@@ -14,8 +15,9 @@ public class Ball : Renderable
 
     public Ball(float radius, Vector2 position)
     {
-        Mass = (float) Math.PI * radius * radius;
+        Mass = (float) (Math.PI * radius * radius);
         Radius = radius;
+        Diameter = radius * 2;
         Position = position;
         Color = Utils.VibrantColor();
     }
@@ -24,6 +26,7 @@ public class Ball : Renderable
     {
         Mass = (float) Math.PI * radius * radius;
         Radius = radius;
+        Diameter = radius * 2;
         Position = new(xPosition, yPosition);
         Color = Utils.VibrantColor();
     }
@@ -36,7 +39,12 @@ public class Ball : Renderable
     public void Update()
     {
         Acceleration = Vector2.Zero;
+
+        // Gravity
         Acceleration.Y += Const.Gravity;
+
+        // Drag -> diameter = cross sectional area (a line)
+        Acceleration.Y -= Const.Drag * Diameter * Velocity.LengthSquared() / Mass;
     }
 
     public void Step()
