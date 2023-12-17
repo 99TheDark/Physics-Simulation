@@ -1,4 +1,4 @@
 public abstract class Example
 {
-    public abstract void Setup(Simulation sim);
+    public static void Setup(Simulation sim) => throw new NotImplementedException();
 }

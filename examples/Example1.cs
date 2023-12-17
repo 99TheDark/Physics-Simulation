@@ -1,6 +1,6 @@
 public class Example1 : Example
 {
-    public override void Setup(Simulation sim)
+    public static new void Setup(Simulation sim)
     {
         sim.Balls.Add(new(0.3f, 2f, 0.2f));
         sim.Balls.Add(new(0.4f, 2.1f, -0.5f));

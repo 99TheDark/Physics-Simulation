@@ -9,7 +9,7 @@ public class Simulation
     public List<Ball> Balls;
     public List<Line> Lines;
 
-    private System.Timers.Timer timer = new(2000);
+    private System.Timers.Timer timer = new(3000);
 
     public Simulation(int width, int height, string title)
     {
@@ -52,6 +52,8 @@ public class Simulation
     {
         Const.DeltaTime = Raylib.GetFrameTime();
 
+        // Balls = Balls.OrderBy(ball => ball.Position.Y).ToList();
+
         // TODO: Do something cleaner than spamming ToList, perhaps copy beforehand
         foreach (Ball ball in Balls.ToList())
         {
@@ -74,9 +76,20 @@ public class Simulation
                 ball.Collide(l);
             }
 
+            /*foreach (Line l in Lines.ToList())
+            {
+
+                ball.Collide(l);
+            }
+
             ball.Step();
 
-            if (Ball.Invalid(ball) || ball.Position.Y >= 500) Balls.Remove(ball);
+            if (Ball.Invalid(ball) || ball.Position.Y >= 30) Balls.Remove(ball);*/
+        }
+
+        foreach (Ball ball in Balls.ToList())
+        {
+            ball.Step();
         }
     }
 
