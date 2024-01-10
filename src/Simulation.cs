@@ -1,3 +1,4 @@
+using System.Numerics;
 using Raylib_cs;
 
 public class Simulation
@@ -11,7 +12,9 @@ public class Simulation
     public List<Ball> Balls;
     public List<Line> Lines;
 
-    private System.Timers.Timer timer = new(3000);
+    private readonly System.Timers.Timer timer;
+    private readonly List<Ball> ballQueue;
+    private readonly List<Line> lineQueue;
 
     public Simulation(int width, int height, string title, int iterations = 10)
     {
@@ -22,6 +25,26 @@ public class Simulation
 
         Balls = new();
         Lines = new();
+
+        timer = new(3000);
+        ballQueue = new();
+        lineQueue = new();
+    }
+
+    private void CallBalls(Action<Ball> act)
+    {
+        for (int i = 0; i < Balls.Count; i++)
+        {
+            act(Balls[i]);
+        }
+    }
+
+    private void CallLines(Action<Line> act)
+    {
+        for (int i = 0; i < Lines.Count; i++)
+        {
+            act(Lines[i]);
+        }
     }
 
     public void Run()
@@ -32,7 +55,9 @@ public class Simulation
         Random rand = new Random();
 
         timer.AutoReset = true;
-        timer.Elapsed += new((_, _) => Balls.Add(new(Utils.RandomRange(rand, 0.1f, 0.5f), 1.5f, 0f)));
+        timer.Elapsed += new((_, _) => ballQueue.Add(
+            new(Utils.RandomRange(rand, 0.1f, 0.5f), 1.5f, 0f)
+        ));
         timer.Start();
 
         while (!Raylib.WindowShouldClose())
@@ -57,54 +82,68 @@ public class Simulation
 
         for (int i = 0; i < Iterations; i++)
         {
-            // TODO: Do something cleaner than spamming ToList, perhaps copy beforehand
-            foreach (Ball ball in Balls.ToList())
+            CallBalls(ball =>
             {
                 ball.Update();
-            }
+            });
 
-            foreach (Ball ball in Balls.ToList())
+            CallBalls(ball =>
             {
                 // TODO: Check for collisions first, and only include them
-                foreach (Ball b in Balls.ToList())
+                CallBalls(b =>
                 {
-                    if (b == ball)
+                    if (ball == b)
                     {
-                        continue;
+                        return;
                     }
 
                     ball.Collide(b);
-                }
-            }
+                });
+            });
 
-            foreach (Ball ball in Balls.ToList())
+            CallBalls(ball =>
             {
-                foreach (Line l in Lines.ToList())
+                CallLines(line =>
                 {
+                    ball.Collide(line);
+                });
+            });
 
-                    ball.Collide(l);
-                }
-            }
-
-            foreach (Ball ball in Balls.ToList())
+            CallBalls(ball =>
             {
                 ball.Step();
+            });
 
+            CallBalls(ball =>
+            {
                 if (Ball.Invalid(ball) || ball.Position.Y >= 30) Balls.Remove(ball);
-            }
+            });
         }
+
+        foreach (Ball ball in ballQueue.ToList())
+        {
+            Balls.Add(ball);
+        }
+
+        foreach (Line line in lineQueue.ToList())
+        {
+            Lines.Add(line);
+        }
+
+        ballQueue.Clear();
+        lineQueue.Clear();
     }
 
     public void Draw()
     {
-        foreach (Line line in Lines.ToList())
+        CallLines(line =>
         {
             line.Draw();
-        }
+        });
 
-        foreach (Ball ball in Balls.ToList())
+        CallBalls(ball =>
         {
             ball.Draw();
-        }
+        });
     }
 }

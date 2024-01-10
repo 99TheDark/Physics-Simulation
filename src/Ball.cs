@@ -1,4 +1,3 @@
-using System.Dynamic;
 using System.Numerics;
 using Raylib_cs;
 
@@ -115,7 +114,7 @@ public class Ball : Renderable
         Vector2 parallel = new(normal.Y, -normal.X);
         Vector2 direction = Utils.Project(Velocity, parallel);
 
-        if (direction != Vector2.Zero)
+        if (direction.Length() > Const.Epsilon)
         {
             Vector2 opposition = -Vector2.Normalize(direction);
             Vector2 friction = opposition * normal.Length() * Friction;

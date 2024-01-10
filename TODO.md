@@ -1,3 +1,4 @@
 # TODO
-- Add drag
-- Add materials
+-Drag
+-Materials
+-Ropes

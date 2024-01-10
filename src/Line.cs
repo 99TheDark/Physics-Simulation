@@ -29,7 +29,7 @@ public class Line : Renderable
     }
 
     // https://www.khanacademy.org/computer-programming/thedarks-clash-of-code-entry/6066684096200704
-    public static List<Line> Bezier(Vector2 p1, Vector2 p2, Vector2 c1, Vector2 c2, int subdivisions = 40)
+    public static List<Line> Bezier(Vector2 p1, Vector2 p2, Vector2 c1, Vector2 c2, int subdivisions = 300)
     {
         List<Vector2> points = new();
         for (int i = 0; i <= subdivisions; i++)

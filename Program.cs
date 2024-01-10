@@ -8,7 +8,7 @@ sim.Balls.Add(new(0.2f, 5f, 5f));
 sim.Balls.Add(new(0.4f, 5f, 3.5f));
 sim.Balls.Add(new(0.6f, 5f, 0f));
 
-/*for (float y = 0f; y <= 5f; y += 0.3f)
+for (float y = 0f; y <= 1.5f; y += 0.3f)
 {
     for (float x = 1.1f; x <= 9.9f; x += 0.3f)
     {
@@ -16,6 +16,8 @@ sim.Balls.Add(new(0.6f, 5f, 0f));
     }
 }*/
 
-Example2.Setup(sim);
+// sim.Lines.Add(new(1f, 2f, 16f, 7f));
+
+Example3.Setup(sim);
 
 sim.Run();
