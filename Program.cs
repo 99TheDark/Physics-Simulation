@@ -16,6 +16,6 @@ sim.Balls.Add(new(0.6f, 5f, 0f));
     }
 }*/
 
-Example3.Setup(sim);
+Example2.Setup(sim);
 
 sim.Run();

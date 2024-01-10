@@ -2,20 +2,23 @@ using Raylib_cs;
 
 public class Simulation
 {
-    public int Width;
-    public int Height;
-    public string Title;
+    public readonly int Width;
+    public readonly int Height;
+    public readonly string Title;
+
+    public readonly int Iterations;
 
     public List<Ball> Balls;
     public List<Line> Lines;
 
     private System.Timers.Timer timer = new(3000);
 
-    public Simulation(int width, int height, string title)
+    public Simulation(int width, int height, string title, int iterations = 10)
     {
         Width = width;
         Height = height;
         Title = title;
+        Iterations = iterations;
 
         Balls = new();
         Lines = new();
@@ -50,46 +53,45 @@ public class Simulation
 
     public void Simulate()
     {
-        Const.DeltaTime = Raylib.GetFrameTime();
+        Const.DeltaTime = Raylib.GetFrameTime() / Iterations;
 
-        // Balls = Balls.OrderBy(ball => ball.Position.Y).ToList();
-
-        // TODO: Do something cleaner than spamming ToList, perhaps copy beforehand
-        foreach (Ball ball in Balls.ToList())
+        for (int i = 0; i < Iterations; i++)
         {
-            ball.Update();
-
-            // TODO: Check for collisions first, and only include them
-            foreach (Ball b in Balls.ToList())
+            // TODO: Do something cleaner than spamming ToList, perhaps copy beforehand
+            foreach (Ball ball in Balls.ToList())
             {
-                if (b == ball)
+                ball.Update();
+            }
+
+            foreach (Ball ball in Balls.ToList())
+            {
+                // TODO: Check for collisions first, and only include them
+                foreach (Ball b in Balls.ToList())
                 {
-                    continue;
+                    if (b == ball)
+                    {
+                        continue;
+                    }
+
+                    ball.Collide(b);
                 }
-
-                ball.Collide(b);
             }
 
-            foreach (Line l in Lines.ToList())
+            foreach (Ball ball in Balls.ToList())
             {
+                foreach (Line l in Lines.ToList())
+                {
 
-                ball.Collide(l);
+                    ball.Collide(l);
+                }
             }
 
-            /*foreach (Line l in Lines.ToList())
+            foreach (Ball ball in Balls.ToList())
             {
+                ball.Step();
 
-                ball.Collide(l);
+                if (Ball.Invalid(ball) || ball.Position.Y >= 30) Balls.Remove(ball);
             }
-
-            ball.Step();
-
-            if (Ball.Invalid(ball) || ball.Position.Y >= 30) Balls.Remove(ball);*/
-        }
-
-        foreach (Ball ball in Balls.ToList())
-        {
-            ball.Step();
         }
     }
 

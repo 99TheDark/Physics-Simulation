@@ -7,7 +7,7 @@ public class Example2 : Example
         sim.Lines.Add(new(10f, 6f, 10f, 1f));
 
         Random rand = new();
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 20; i++)
         {
             float x = Utils.RandomRange(rand, 2.5f, 8.5f);
             float y = 6 - i;

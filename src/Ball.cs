@@ -1,3 +1,4 @@
+using System.Dynamic;
 using System.Numerics;
 using Raylib_cs;
 
@@ -12,6 +13,24 @@ public class Ball : Renderable
     public Vector2 Position;
     public Vector2 Velocity = Vector2.Zero;
     public Vector2 Acceleration = Vector2.Zero;
+
+    public Vector2 DeltaPosition = Vector2.Zero;
+    public Vector2 DeltaVelocity = Vector2.Zero;
+
+    public float Friction
+    {
+        get
+        {
+            if (Velocity.Length() < Const.Epsilon)
+            {
+                return Const.StaticFriction;
+            }
+            else
+            {
+                return Const.KineticFriction;
+            }
+        }
+    }
 
     public Ball(float radius, Vector2 position)
     {
@@ -40,6 +59,9 @@ public class Ball : Renderable
     {
         Acceleration = Vector2.Zero;
 
+        DeltaPosition = Vector2.Zero;
+        DeltaVelocity = Vector2.Zero;
+
         // Gravity
         Acceleration.Y += Const.Gravity;
 
@@ -49,8 +71,8 @@ public class Ball : Renderable
 
     public void Step()
     {
-        Velocity += Acceleration * Const.DeltaTime;
-        Position += Velocity * Const.DeltaTime;
+        Velocity += DeltaVelocity + Acceleration * Const.DeltaTime;
+        Position += DeltaPosition + Velocity * Const.DeltaTime;
     }
 
     public void Collide(Line line)
@@ -59,7 +81,7 @@ public class Ball : Renderable
 
         if (exit != Vector2.Zero)
         {
-            Position += exit;
+            DeltaPosition += exit;
 
             ApplyNormal(normal);
         }
@@ -71,11 +93,11 @@ public class Ball : Renderable
 
         if (exit != Vector2.Zero)
         {
-            Position += exit;
+            DeltaPosition += exit;
 
             // TODO: Apply friction using ApplyNormal once velocity is sorted out
-            ApplyForce(normal);
-            ball.ApplyForce(-normal);
+            ApplyNormal(normal);
+            ball.ApplyNormal(-normal);
         }
     }
 
@@ -90,15 +112,13 @@ public class Ball : Renderable
 
         ApplyForce(normal);
 
-        Velocity -= Utils.Project(Velocity, normal) * Const.StaticFriction;
-
         Vector2 parallel = new(normal.Y, -normal.X);
         Vector2 direction = Utils.Project(Velocity, parallel);
 
         if (direction != Vector2.Zero)
         {
             Vector2 opposition = -Vector2.Normalize(direction);
-            Vector2 friction = opposition * normal.Length() * Const.KineticFriction;
+            Vector2 friction = opposition * normal.Length() * Friction;
 
             ApplyForce(friction);
         }

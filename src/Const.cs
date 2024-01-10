@@ -8,8 +8,10 @@ public static class Const
 
     public static readonly float Drag = 0.01f;
 
-    public static readonly bool ForceArrows = true;
+    public static readonly bool ForceArrows = false;
     public static readonly float LineThickness = 3f;
 
     public static float DeltaTime = 0f;
+
+    public static readonly float Epsilon = 0.001f;
 }
