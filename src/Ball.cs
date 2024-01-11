@@ -114,8 +114,9 @@ public class Ball : Renderable
         Vector2 parallel = new(normal.Y, -normal.X);
         Vector2 direction = Utils.Project(Velocity, parallel);
 
-        // TODO: Make this somehow only work on rigid objects, like it should
-        // Velocity -= Utils.Project(Velocity, normal);
+        // Temporary solution to make only rigidbodies lower acceleration
+        if (Utils.Project(Acceleration, normal).Length() < Const.Epsilon)
+            Velocity -= Utils.Project(Velocity, normal);
 
         if (direction.Length() > Const.Epsilon)
         {
